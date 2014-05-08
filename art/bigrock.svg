@@ -14,7 +14,7 @@
    id="svg5382"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="New document 12">
+   sodipodi:docname="bigrock.svg">
   <defs
      id="defs5384" />
   <sodipodi:namedview
@@ -24,17 +24,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.35"
-     inkscape:cx="375"
-     inkscape:cy="520"
+     inkscape:zoom="5.6"
+     inkscape:cx="371.99693"
+     inkscape:cy="519.2749"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="463"
-     inkscape:window-height="423"
-     inkscape:window-x="175"
-     inkscape:window-y="175"
-     inkscape:window-maximized="0" />
+     inkscape:window-width="1600"
+     inkscape:window-height="838"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
   <metadata
      id="metadata5387">
     <rdf:RDF>
@@ -52,10 +52,13 @@
      inkscape:groupmode="layer"
      id="layer1">
     <path
-       style="fill:none;stroke:#00ff00;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline"
+       style="fill:none;stroke:#00ff00;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;fill-opacity:1"
        d="m 366.5,519.36218 9,0 3,4 6,0 5,5 -5,5 3,3 0,3 -6,6 -6,0 -4,-4 -3,3 -3,0 -3,-3 0,-4 -2,-2 0,-4 4,-4 -3,-3 z"
        id="path5324"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccccccccccccccccccc" />
+       sodipodi:nodetypes="cccccccccccccccccccc"
+       inkscape:export-filename="C:\Users\Luke\Documents\GitHub\Asteroids-js\art\bigRock.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
   </g>
 </svg>

@@ -14,7 +14,7 @@
    id="svg5411"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="New document 14">
+   sodipodi:docname="medrock.svg">
   <defs
      id="defs5413" />
   <sodipodi:namedview
@@ -56,6 +56,9 @@
        d="m 206.42857,598.29075 2,0 2,-2 4,0 2,2 2,0 1,2 -3,3 3,3 0,2 -3,3 -2,0 -2,-2 -2,2 -3,0 -3,-3 2,-2 -3,-3 0,-2 z"
        id="path5398"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccccccccccccccccccc" />
+       sodipodi:nodetypes="cccccccccccccccccccc"
+       inkscape:export-filename="C:\Users\Luke\Documents\GitHub\Asteroids-js\art\medRock.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
   </g>
 </svg>

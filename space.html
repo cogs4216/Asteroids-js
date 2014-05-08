@@ -5,54 +5,288 @@
     <title>space</title>
     <script type="text/javascript"
             src = "simpleGame.js"></script>
-    <script type="text/javascript">
-    var ship;
+    <script type="text/javascript"
+            src = "displayClasses.js"></script>
+	<script type="text/javascript">
+	
+	
+	/* MODEL */
+
+	var ship;
+	var shipIsDead;
     var game;
-    var asteroid; 
+    	
+	var bigAsteroids = new Array(); 
+    var medAsteroids = new Array();
+    var smallAsteroids = new Array();
+	
+	var bullets = new Array();
+	
+	var gunTemperature = 0;
+	var magazine = new Array();
+	
+	/* INIT */
+	
+    function init(){
+        game = new Scene();
+        ship = new Ship();
+		shipIsDead = false;
+		createFirstAsteroids();        
+        game.setBG("black");
+        game.start();
+    } // end init
     
-    //a recent edit
-    
-    function Ship(){
-        tShip = new Sprite(game, "ship.png", 25, 25);
-        tShip.setSpeed(3);
+	function createFirstAsteroids(){
+		for (var i = 0 ; i < 10 ; i++)
+		{
+			var asteroid = new BigAsteroid();
+			var initialX = Math.random()*asteroid.cWidth;
+			var initialY = Math.random()*asteroid.cHeight;
+			asteroid.setSpeed(0);
+			asteroid.setPosition(initialX, initialY);
+			asteroid.addVector(Math.random()*360,1)
+			bigAsteroids.push(asteroid);
+		}
+	}
+	
+	
+	/* BULLETS */
+	
+	function fireBullet(){
+		if(gunTemperature <= 0)
+		{
+			var bullet = getBullet()
+			bullets.push(bullet);
+			bullet.setPosition(ship.x, ship.y);
+			bullet.setSpeed(0);
+			bullet.show();
+			bullet.addVector(ship.getImgAngle(), 10);
+			gunTemperature = 10;
+		}
+	}
+	
+	function getBullet(){
+		var newBullet;
+		if (magazine.length < 1)
+		{
+			newBullet = new Bullet();
+		}else{
+			newBullet = magazine.pop();
+		}
+		return newBullet;
+	}
+
+	/* COLLISIONS */
+	
+	/* check collisions between the ship and an asteroid Array */
+	function checkShipCollisions(asteroidArray)
+	{
+		var collision = false;
+		var numRocks = asteroidArray.length;
+		for (var i = 0 ; i < numRocks ; i++)
+		{
+			var asteroid = asteroidArray[i];
+			if(asteroid.collidesWith(ship))
+			{
+				console.log("collision");
+				ship.hide();
+				shipIsDead = true;
+				collision = true;
+				break;
+			}
+		}
+		return collision
+	}
+	
+	/* check an array of rocks for collisions with each bullet */
+	function checkBulletCollisions(asteroidArray, collisionHandler){
+		var numRocks = asteroidArray.length;
+		var numBullets = bullets.length;
+		for (var i = 0 ; i < numRocks ; i++)
+		{
+			var asteroid = asteroidArray[i];
+			for (var j = 0 ; j < numBullets ; j++)
+			{	
+				var bullet = bullets[j];
+				if(asteroid.collidesWith(bullet))
+				{
+					bullet.hide();
+					bullet.setSpeed(0);
+					collisionHandler(asteroid);
+					asteroid.hide();
+					asteroid.setSpeed(0);
+					break; //this bullet's done it's thing
+				}
+			}
+		}
+	}
+	
+
+	/* ASTEROID SPLIT HANDLERS */
+	
+	function bigRockSplitHandler(bigRock)
+	{
+		console.log("bigRockHit");
+	
+		//big rock becomes 2 med rocks
+		var medRock1 = new MedAsteroid();	
+		var medRock2 = new MedAsteroid();
+		
+		medRock1.setPosition(bigRock.x, bigRock.y);
+		medRock2.setPosition(bigRock.x, bigRock.y);
+		
+		medRock1.setSpeed(0);
+		medRock2.setSpeed(0);
+		
+		var angle = Math.random()*360;
+		medRock1.addVector(angle,1)
+		medRock2.addVector((angle+90+Math.random()*180),1)
+		
+		medAsteroids.push(medRock1);	
+		medAsteroids.push(medRock2);	
+	}
+
+	function medRockSplitHandler(medRock)
+	{
+		console.log("medRockHit");
+	
+		//med rock becomes 3 small rocks
+		var smallRock1 = new SmallAsteroid();	
+		var smallRock2 = new SmallAsteroid();
+		var smallRock3 = new SmallAsteroid();
+		
+		smallRock1.setPosition(medRock.x, medRock.y);
+		smallRock2.setPosition(medRock.x, medRock.y);
+		smallRock3.setPosition(medRock.x, medRock.y);
+		
+		smallRock1.setSpeed(0);
+		smallRock2.setSpeed(0);
+		smallRock3.setSpeed(0);
+		
+		var angle = Math.random()*360;
+		smallRock1.addVector(angle,1)
+		smallRock2.addVector((angle + 90 + Math.random()*90),1)
+		smallRock3.addVector((angle + 180 + Math.random()*90),1)
+		
+		smallAsteroids.push(smallRock1);	
+		smallAsteroids.push(smallRock2);		
+		smallAsteroids.push(smallRock3);				
+	}
+
+	function smallRockSplitHandler(smallRock)
+	{
+		console.log("smallRockHit");
+	}	
+	
+	/* SHIP */
+	
+	function Ship()
+	{
+        tShip = new Sprite(game, "ship.png", 14, 8);
+        tShip.setSpeed(0);
         tShip.checkKeys = function(){
             if (keysDown[K_LEFT]){
                 this.changeImgAngleBy(-5);
             }
             if (keysDown[K_RIGHT]){
-                this.changeImgAngleBy(5);
+				this.changeImgAngleBy(5);
             }
             if (keysDown[K_UP]){
-                this.addVector(this.getImgAngle(), .1);
+				this.addVector(this.getImgAngle(), 0.2);
             }
+			if (keysDown[K_DOWN]){
+				if (this.speed > 0)
+				{
+					if (this.speed <= 0.2)
+					{
+						this.setSpeed(0);
+					}else{
+						this.changeSpeedBy(-0.2);
+					}
+				}
+			}
+			if (keysDown[K_SPACE]){
+				fireBullet();
+			}
         } // end function
         return tShip;
     } // object definition
-    
-	function Asteroid() {
-		var tAsteroid = new Sprite(game, "missile.png", 25, 25);
-		tAsteroid.setSpeed(3);
-		tAsteroid.addVector(10,1)
-		return tAsteroid;
-	}//object definition
-	    
-    function init(){
-        game = new Scene();
-        ship = new Ship();
-        asteroid = new Asteroid();        
-        
-        game.setBG("black");
-        
-        game.start();
-    } // end init
-    
-    function update(){
+	
+	
+	/* GAME TICK */
+		
+    function update()
+	{
+		//clear canvas
         game.clear();
-        ship.checkKeys();
-        ship.update();
-        asteroid.update();
-    } // end update
+	
+		//asteroids and bullets
+		updateAsteroids();
+        bullets = updateBullets();
+		
+		//ship
+		if (!shipIsDead)
+		{
+			ship.checkKeys();
+			ship.update();
+		}
+		if (gunTemperature > 0) gunTemperature--;
+				
+		//ship collisions
+		if (!checkShipCollisions(bigAsteroids))
+		{
+			if(!checkShipCollisions(medAsteroids))
+			{
+				checkShipCollisions(smallAsteroids);
+			}
+		}
+		
+		//bullet collisions
+		checkBulletCollisions(bigAsteroids, bigRockSplitHandler);
+		checkBulletCollisions(medAsteroids, medRockSplitHandler);
+		checkBulletCollisions(smallAsteroids, smallRockSplitHandler);		
+	} // end update
     
+	function updateAsteroids(){
+		var numRocks = bigAsteroids.length;
+		var asteroid;
+		for (var i = 0 ; i < numRocks ; i++)
+		{
+			asteroid = bigAsteroids[i];
+			asteroid.update();
+		}
+		numRocks = medAsteroids.length;
+		for (var i = 0 ; i < numRocks ; i++)
+		{
+			asteroid = medAsteroids[i];
+			asteroid.update();
+		}
+		numRocks = smallAsteroids.length;
+		for (var i = 0 ; i < numRocks ; i++)
+		{
+			asteroid = smallAsteroids[i];
+			asteroid.update();
+		}
+	}
+	
+	function updateBullets(){
+		var numBullets = bullets.length;
+		var newBullets = new Array();
+		for (var i = 0 ; i < numBullets ; i++)
+		{
+			var bullet = bullets[i];
+			//any bullets that are stopped can be returned to the magazine
+			if(bullet.getSpeed() == 0)
+			{
+				magazine.push(bullet);
+			}else{
+				newBullets.push(bullet);
+				bullet.update();
+			}
+		}
+		return newBullets;
+	}
+	
     </script>
 </head>
 <body onload = "init()">

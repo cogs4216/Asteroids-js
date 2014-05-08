@@ -174,15 +174,14 @@ function Sprite(scene, imageFile, width, height){
       
     } else if (this.boundAction == STOP){
       if (offLeft || offRight || offTop || offBottom){
-	this.setSpeed(0);
+		this.setSpeed(0);
       }
     } else if (this.boundAction == DIE){
       if (offLeft || offRight || offTop || offBottom){
         this.hide();
-	this.setSpeed(0);
-      }
-      
-    } else {
+		this.setSpeed(0);
+      } 
+    }else {
       //keep on going forever
     }
   } // end checkbounds
@@ -340,30 +339,28 @@ function Sprite(scene, imageFile, width, height){
     collision = false;
     if (this.visible){
       if (sprite.visible){
-	//define borders
-	myLeft = this.x;
-	myRight = this.x + this.width;
-	myTop = this.y;
-	myBottom = this.y + this.height;
-	otherLeft = sprite.x;
-	otherRight = sprite.x + sprite.width;
-	otherTop = sprite.y;
-	otherBottom = sprite.y + sprite.height;
-    
-	//assume collision
-	collision = true;
-	
-	//determine non-colliding states
-	if ((myBottom < otherTop) ||
-	    (myTop > otherBottom) ||
-	    (myRight < otherLeft) ||
-	    (myLeft > otherRight)) {
-	      collision = false;
-	} // end if
-
+		//define borders
+		myLeft = this.x;
+		myRight = this.x + this.width;
+		myTop = this.y;
+		myBottom = this.y + this.height;
+		otherLeft = sprite.x;
+		otherRight = sprite.x + sprite.width;
+		otherTop = sprite.y;
+		otherBottom = sprite.y + sprite.height;
+		
+		//assume collision
+		collision = true;
+		
+		//determine non-colliding states
+		if ((myBottom < otherTop) ||
+			(myTop > otherBottom) ||
+			(myRight < otherLeft) ||
+			(myLeft > otherRight)) {
+			  collision = false;
+		} // end if
       } // end 'other visible' if
     } // end 'I'm visible' if
-
     return collision;
   } // end collidesWith
   
@@ -430,7 +427,7 @@ function Scene(){
 	document.onkeydown = this.updateKeys;
 	document.onkeyup = this.clearKeys;
       } // end if
-      this.intID = setInterval(localUpdate, 50);
+      this.intID = setInterval(localUpdate, 25);
       document.onmousemove = this.updateMousePos;
     } 
 
@@ -438,7 +435,7 @@ function Scene(){
       clearInterval(this.intID);
     }
 
-    this.updateKeys = function(e){      
+    this.updateKeys = function(e){   
       //set current key
       currentKey = e.keyCode;
       keysDown[e.keyCode] = true;
